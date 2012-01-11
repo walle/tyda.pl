@@ -10,20 +10,36 @@ if (@ARGV != 1) {
 }
 
 my $url = "http://tyda.se/search?w=" . $ARGV[0];
-my @results;
+my %results;
 
 pQuery($url)
-  ->find(".tyda_res_body_trans td")
+  ->find(".tyda_res_body")
   ->each(sub {
-    my $text = pQuery($_)->text;
-    unless ($text =~ /^\s*$/) {
-      push(@results, $text);
-    }
+    my $html = pQuery($_)->html;
+    my $text = "";
+    my $title = "";
+
+    pQuery($html)
+      ->find('.tyda_res_body_wc_no_top_border td')
+      ->each(sub {
+        $title = pQuery($_)->text;
+
+        pQuery($html)
+          ->find('.tyda_res_body_trans td')
+          ->each(sub {
+            $text = pQuery($_)->text;
+            unless ($title =~ /^\s*$/ || $text =~ /^\s*$/) {
+              $results{$title} .= "\t" .$text . "\n";
+            }
+          });
+      });
+
   });
 
 my %seen = ();
-@results = grep { ! $seen{$_} ++ } @results;
+%results = grep { ! $seen{$_} ++ } %results;
 
-foreach (@results) {
- 	print $_ . "\n";
+while ((my $title, my $text) = each(%results))
+{
+	print "$title\n$text\n";
 }
