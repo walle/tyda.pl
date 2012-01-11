@@ -1,0 +1,29 @@
+#!/usr/bin/perl -w
+use strict;
+use pQuery;
+
+binmode(STDOUT, ":utf8");
+
+if (@ARGV != 1) {
+  print "\nUsage: tyda \"Phrase to search\" \n";
+  exit;
+}
+
+my $url = "http://tyda.se/search?w=" . $ARGV[0];
+my @results;
+
+pQuery($url)
+  ->find("table .tyda_res_body_trans td")
+  ->each(sub {
+    my $text = pQuery($_)->text;
+    unless ($text =~ /^\s*$/) {
+      push(@results, $text);
+    }
+  });
+
+my %seen = ();
+@results = grep { ! $seen{$_} ++ } @results;
+
+foreach (@results) {
+ 	print $_ . "\n";
+}

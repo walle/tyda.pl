@@ -1,0 +1,7 @@
+h1. tyda
+
+Simple command line tool to search tyda.se.
+
+Written as first ever perl project at HACKATON.
+
+May be enhanced with more features in the future.
