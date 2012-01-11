@@ -5,7 +5,7 @@ use pQuery;
 binmode(STDOUT, ":utf8");
 
 if (@ARGV != 1) {
-  print "\nUsage: tyda \"Phrase to search\" \n";
+  print "Usage: tyda \"Phrase to search\" \n";
   exit;
 }
 
