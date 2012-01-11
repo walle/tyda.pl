@@ -13,7 +13,7 @@ my $url = "http://tyda.se/search?w=" . $ARGV[0];
 my @results;
 
 pQuery($url)
-  ->find("table .tyda_res_body_trans td")
+  ->find(".tyda_res_body_trans td")
   ->each(sub {
     my $text = pQuery($_)->text;
     unless ($text =~ /^\s*$/) {
